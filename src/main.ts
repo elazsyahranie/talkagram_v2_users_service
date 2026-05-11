@@ -30,14 +30,9 @@ async function bootstrap() {
 
   // Start listening for incoming messages
   await app.listen();
-  console.log('User Service is listening on port 3001');
-  // const app = await NestFactory.create(
-  //   AppModule,
-  //   { logger: WinstonModule.createLogger(winstonConfig) },
-  //   // {
-  //   // bufferLogs: true
-  //   // }
-  // );
+  console.log(
+    `User Service is listening on port ${process.env.USERS_SERVICE_PORT}`,
+  );
 
   // // const { httpAdapter } = app.get(HttpAdapterHost);
   // // app.useGlobalFilters(new ExceptionsFilter());

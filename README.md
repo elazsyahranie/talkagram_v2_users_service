@@ -161,23 +161,38 @@ Avoid putting business logic directly inside controllers or gateways.
 ### 2. Use Zod for Validation
 All incoming data is validated using Zod schemas. DTOs are used primarily to provide the structure expected by NestJS and TypeScript and are **not currently responsible for returning validation errors**.
 
-Example:
+Example of a DTO Validation:
 ```
-export class AddGroupParticipants {
+export class CreateUserDto {
   @IsString()
-  @IsNotEmpty()
-  admin: string;
+  @IsUUID()
+  id: string;
 
   @IsString()
-  @IsNotEmpty()
-  room_id: string;
+  first_name: string;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ParticipantDto)
-  @ArrayMinSize(1)
-  participants: ParticipantDto[];
-}
+  @IsString()
+  middle_name: string;
+
+  @IsString()
+  last_name: string;
+
+```
+
+Example of a Zod Validation:
+```
+  static readonly REGISTER: ZodType = z.object({
+    name: z.string('Name is required!').min(1, 'Name is required!').max(100),
+    password: z.string('Password is required!').min(1).max(100),
+    username: z.string('Username is required!').min(1).max(100),
+    phone: z.string('Phone is required!').min(1).max(100),
+    email: z.string('Email is required!').min(1).max(100),
+    role: z.literal(['Admin', 'User'], {
+      error: (iss) =>
+        iss.input === undefined ? 'Role is required!' : 'Invalid input!',
+    }),
+    about: z.string().min(1).max(100).optional(),
+  });
 ```
 
 Do not rely on DTO validation for request validation. Use the corresponding Zod schema when validating incoming data.

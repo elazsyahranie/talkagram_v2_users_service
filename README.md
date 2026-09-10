@@ -12,3 +12,32 @@ The Users Service is responsible for managing user-related data and operations, 
 - Deleting users
 
 Authentication and authorization are handled by the API Gateway rather than the Users Service.
+
+## Message Patterns 
+The Users Service communicates with the API Gateway using NestJS TCP microservice transport.
+
+The following message patterns define the operations that can be requested by other services.
+
+- `usersLogin`</br>
+  Authenticate a user.
+- `usersRegister`</br>
+  Create a new account.
+- `usersGetProfile`</br>
+  Fetch the authenticated user's own data.
+- `usersGetAll`</br>
+  Fetch a list of users.
+- `usersGetDetail`</br>
+  Fetch an individual user data.
+- `usersUpdate`</br>
+  Update the authenticated user's own data.
+- `usersDeleteForAdmin`</br>
+  Delete a user's data by ID - `ADMIN ONLY`
+- `usersDelete`</br>
+  Delete the authenticated user's own account.
+
+### Design Note
+Some message patterns could technically be merged. For example, `usersGetProfile` and `usersGetDetail` both retrieve user data, while `usersDelete` and `usersDeleteForAdmin` both delete a user.
+
+They are kept as separate message patterns to distinguish self-service operations from administrative operations and to make the Users Service's logs easier to understand and trace.
+
+For self-service operations, the user ID is obtained from the authenticated user's JWT. For operations targeting another user, such as administrative deletion or retrieving a user's details, the ID is provided by the request.

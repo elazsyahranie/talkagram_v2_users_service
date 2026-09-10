@@ -104,3 +104,13 @@ npm i
 * `npm run test` — Run unit tests.
 * `npm run test:watch` — Run tests in watch mode.
 * `npm run test:e2e` — Run end-to-end tests.
+
+## Typical Module Structure
+Modules generally follow this structure:
+
+- `controller` — Handles HTTP requests and exposes the module's API endpoints.
+- `service` — Contains the business logic for the module.
+- `dto` — Defines the data transfer objects used for validating and structuring request data.
+- `validation.ts` — Contains custom validation logic and validation rules for the module.
+- `module` — Defines the module and its dependencies.
+  

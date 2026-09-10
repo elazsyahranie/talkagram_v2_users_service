@@ -36,8 +36,45 @@ The following message patterns define the operations that can be requested by ot
   Delete the authenticated user's own account.
 
 ### Design Note
-Some message patterns could technically be merged. For example, `usersGetProfile` and `usersGetDetail` both retrieve user data, while `usersDelete` and `usersDeleteForAdmin` both delete a user.
+Some message patterns could technically be merged. For example, usersGetProfile and usersGetDetail both retrieve user data, while usersDelete and usersDeleteForAdmin both delete a user.
 
 They are kept as separate message patterns to distinguish self-service operations from administrative operations and to make the Users Service's logs easier to understand and trace.
 
 For self-service operations, the user ID is obtained from the authenticated user's JWT. For operations targeting another user, such as administrative deletion or retrieving a user's details, the ID is provided by the request.
+
+## Enviromental Variables 
+Each service contains its environment variables in a .env file. The .env file should be included in `.gitignore`, especially when the repository is public, to prevent sensitive information or credentials from being exposed.
+
+The Users Service .env file contains the following variables:
+```
+PORT=
+GATEWAY=
+USERS_SERVICE_HOST=
+USERS_SERVICE_PORT=
+MEDIA_SERVICE_HOST=
+MEDIA_SERVICE_PORT=
+PROJECT_URL=
+
+TOKEN_SECRET_KEY=
+TOKEN_EXPIRES=
+
+ENVIRONMENT=
+
+REDIS_HOST=
+REDIS_PORT=
+
+# This was inserted by `prisma init`:
+# Environment variables declared in this file are NOT automatically loaded by Prisma.
+# Please add `import "dotenv/config";` to your `prisma.config.ts` file, or use the Prisma CLI with Bun
+# to load environment variables from .env files: https://pris.ly/prisma-config-env-vars.
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+# The following `prisma+postgres` URL is similar to the URL produced by running a local Prisma Postgres 
+# server with the `prisma dev` CLI command, when not choosing any non-default ports or settings. The API key, unlike the 
+# one found in a remote Prisma Postgres URL, does not contain any sensitive information.
+
+# DATABASE_URL=
+DATABASE_URL=
+```

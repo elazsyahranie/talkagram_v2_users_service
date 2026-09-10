@@ -176,7 +176,7 @@ export class CreateUserDto {
 
   @IsString()
   last_name: string;
-
+}
 ```
 
 Example of a Zod Validation:

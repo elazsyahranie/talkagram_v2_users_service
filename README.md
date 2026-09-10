@@ -143,3 +143,46 @@ throw new RpcException({
 
 The API Gateway can then translate the error into an appropriate HTTP response for the client.
 
+## Development Guidelines 
+### 1. Keep Business Logic Inside Services
+Controllers and gateways should primarily handle communication.
+```mermaid
+flowchart TD
+    Controller[Controller]
+    Service[Service]
+    Repository[Repository]
+
+    Controller --> Service
+    Service --> Repository
+```
+
+Avoid putting business logic directly inside controllers or gateways.
+
+### 2. Use Zod for Validation
+All incoming data is validated using Zod schemas. DTOs are used primarily to provide the structure expected by NestJS and TypeScript and are **not currently responsible for returning validation errors**.
+
+Example:
+```
+export class AddGroupParticipants {
+  @IsString()
+  @IsNotEmpty()
+  admin: string;
+
+  @IsString()
+  @IsNotEmpty()
+  room_id: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ParticipantDto)
+  @ArrayMinSize(1)
+  participants: ParticipantDto[];
+}
+```
+
+Do not rely on DTO validation for request validation. Use the corresponding Zod schema when validating incoming data.
+
+### 3. Avoid Direct Database Access From Other Services
+The Chat Service should own its chat-related data.
+
+Other services should communicate through the Chat Service rather than directly querying its database.
